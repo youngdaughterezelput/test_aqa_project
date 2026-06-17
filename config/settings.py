@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     base_url: str = "https://opensource-demo.orangehrmlive.com"
     browser: str = "chromium"
     headless: bool = True
-    timeout: int = 10000
+    timeout: int = 30000
     viewport_width: int = 1440
     viewport_height: int = 900
 

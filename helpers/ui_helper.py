@@ -43,3 +43,4 @@ class UiHelper:
 
     def set_default_timeout(self) -> None:
         self.page.set_default_timeout(settings.timeout)
+        self.page.set_default_navigation_timeout(settings.timeout)

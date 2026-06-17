@@ -1,6 +1,6 @@
 import allure
 import pytest
-from playwright.sync_api import Browser, BrowserType, Page, Playwright, sync_playwright
+from playwright.sync_api import Browser, BrowserType, Error, Page, Playwright, TimeoutError, sync_playwright
 
 from config.settings import settings
 from config.test_data import admin_user as default_admin_user
@@ -91,9 +91,12 @@ def attach_screenshot_on_failure(request, page: Page):
     for phase in ("setup", "call"):
         report = getattr(request.node, f"rep_{phase}", None)
         if report and report.failed:
-            allure.attach(
-                page.screenshot(full_page=True),
-                name=f"{request.node.name} - {phase} failed",
-                attachment_type=allure.attachment_type.PNG,
-            )
+            try:
+                allure.attach(
+                    page.screenshot(full_page=True, timeout=settings.timeout),
+                    name=f"{request.node.name} - {phase} failed",
+                    attachment_type=allure.attachment_type.PNG,
+                )
+            except (TimeoutError, Error):
+                pass
             break

@@ -43,6 +43,7 @@ class BasePage:
                 element.selector_type,
                 element.selector_value,
                 element.name,)
+            expect(locator.first).to_be_visible(timeout=settings.timeout)
             actual_count = locator.count()
             assert actual_count >= element.minimum_count, (
                 f"{element.name} expected at least {element.minimum_count} elements for "

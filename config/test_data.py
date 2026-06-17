@@ -60,7 +60,11 @@ login_branding_logo = PresentUiElementExpectation(
 reset_password_required_message = VisibleUiElementExpectation(
     name="Reset password required message",
     selector_type="css",
-    selector_value=".oxd-input-group__message",)
+    selector_value=(
+        "#app > div.orangehrm-forgot-password-container > "
+        "div.orangehrm-forgot-password-wrapper > div > form > "
+        "div.oxd-form-row > div > span"
+    ),)
 
 
 reset_password_success_title = VisibleUiElementExpectation(

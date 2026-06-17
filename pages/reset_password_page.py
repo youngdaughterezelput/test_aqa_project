@@ -9,6 +9,7 @@ from helpers.locators import get_by_class, get_by_placeholder, get_by_role
 from helpers.paths import (
     LOGIN_PATH,
     REQUEST_PASSWORD_RESET_PATH,
+    REQUEST_RESET_PASSWORD_PATH,
     SEND_PASSWORD_RESET_PATH,)
 from pages.base_page import BasePage
 
@@ -16,7 +17,8 @@ from pages.base_page import BasePage
 class ResetPasswordPage(BasePage):
     path = REQUEST_PASSWORD_RESET_PATH
     confirmation_paths = [
-        SEND_PASSWORD_RESET_PATH,]
+        SEND_PASSWORD_RESET_PATH,
+        REQUEST_RESET_PASSWORD_PATH,]
 
     def __init__(self, helper):
         super().__init__(helper)

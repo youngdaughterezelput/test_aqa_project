@@ -17,7 +17,7 @@ class ResetPasswordPage(BasePage):
 
     def should_be_opened(self) -> None:
         with self.step("Verify reset password page URL"):
-            self.wait_for_url(self.path)
+            self.wait_for_path(self.path)
 
     def should_display_reset_password_form(self) -> None:
         with self.step("Verify reset password form is displayed"):

@@ -24,7 +24,7 @@ happened because Docker Compose mounts the project directory with:
 ```
 
 That bind mount overrides the executable bit that was set inside the image.  
-Your local file [scripts/run_tests_with_allure.sh](/Users/rezelput/Documents/Projects/qa_framework_project/scripts/run_tests_with_allure.sh) is currently not executable, so direct `exec ./scripts/run_tests_with_allure.sh` fails.
+Your local file [scripts/run_tests_with_allure.sh](scripts/run_tests_with_allure.sh) is currently not executable, so direct `exec ./scripts/run_tests_with_allure.sh` fails.
 
 It is now fixed by running the script through `bash`:
 
@@ -193,14 +193,13 @@ That usually means:
 ### 4. Create Pipeline job
 
 Create a Pipeline job pointing to this repository.  
-The repo already contains [Jenkinsfile](/Users/rezelput/Documents/Projects/qa_framework_project/Jenkinsfile).
+The repo already contains [Jenkinsfile](Jenkinsfile).
 
 ### 5. Run the job
 
 The pipeline will:
 
 1. checkout the repo
-2. create `.env` from `.env.example` if needed
 3. run `docker compose up --build --abort-on-container-exit --exit-code-from tests`
 4. archive:
    - `allure-results/**`
@@ -209,7 +208,7 @@ The pipeline will:
 
 ## Jenkinsfile Behavior
 
-Current [Jenkinsfile](/Users/rezelput/Documents/Projects/qa_framework_project/Jenkinsfile):
+Current [Jenkinsfile](Jenkinsfile):
 
 - runs tests through Docker Compose
 - archives Allure artifacts

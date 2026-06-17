@@ -4,7 +4,7 @@ from playwright.sync_api import Browser, BrowserType, Page, Playwright, sync_pla
 
 from config.settings import settings
 from config.test_data import admin_user as default_admin_user
-from helpers.page_helper import PageHelper
+from helpers.ui_helper import UiHelper
 from pages.dashboard_page import DashboardPage
 from pages.login_page import LoginPage
 from pages.reset_password_page import ResetPasswordPage
@@ -52,25 +52,25 @@ def page(browser: Browser) -> Page:
 
 
 @pytest.fixture
-def page_helper(page: Page) -> PageHelper:
-    helper = PageHelper(page)
+def ui_helper(page: Page) -> UiHelper:
+    helper = UiHelper(page)
     helper.set_default_timeout()
     return helper
 
 
 @pytest.fixture
-def login_page(page_helper: PageHelper) -> LoginPage:
-    return LoginPage(page_helper)
+def login_page(ui_helper: UiHelper) -> LoginPage:
+    return LoginPage(ui_helper)
 
 
 @pytest.fixture
-def dashboard_page(page_helper: PageHelper) -> DashboardPage:
-    return DashboardPage(page_helper)
+def dashboard_page(ui_helper: UiHelper) -> DashboardPage:
+    return DashboardPage(ui_helper)
 
 
 @pytest.fixture
-def reset_password_page(page_helper: PageHelper) -> ResetPasswordPage:
-    return ResetPasswordPage(page_helper)
+def reset_password_page(ui_helper: UiHelper) -> ResetPasswordPage:
+    return ResetPasswordPage(ui_helper)
 
 
 @pytest.fixture

@@ -16,6 +16,6 @@ class DashboardPage(BasePage):
 
     def should_be_opened(self) -> None:
         with self.step("Verify dashboard page is opened"):
-            self.wait_for_url(self.path)
+            self.wait_for_path(self.path)
             expect(self.dashboard_header).to_be_visible(timeout=settings.timeout)
             expect(self.user_dropdown).to_be_visible(timeout=settings.timeout)

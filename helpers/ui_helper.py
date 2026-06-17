@@ -1,9 +1,11 @@
-from playwright.sync_api import Locator, Page
+import re
+
+from playwright.sync_api import Locator, Page, expect
 
 from config.settings import settings
 
 
-class PageHelper:
+class UiHelper:
     def __init__(self, page: Page):
         self.page = page
 
@@ -30,8 +32,14 @@ class PageHelper:
     def by_css(self, selector: str) -> Locator:
         return self.page.locator(selector)
 
-    def wait_for_url(self, url_part: str) -> None:
-        self.page.wait_for_url(f"**{url_part}**", timeout=settings.timeout)
+    def has_path(self, path: str) -> bool:
+        return path in self.page.url
+
+    def wait_for_path(self, path: str) -> None:
+        if self.has_path(path):
+            return
+        expected_url_pattern = re.compile(rf".*{re.escape(path)}$")
+        expect(self.page).to_have_url(expected_url_pattern, timeout=settings.timeout)
 
     def set_default_timeout(self) -> None:
         self.page.set_default_timeout(settings.timeout)

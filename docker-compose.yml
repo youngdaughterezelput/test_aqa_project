@@ -5,6 +5,9 @@ services:
       - .:/app
       - ./allure-results:/app/allure-results
       - ./allure-report:/app/allure-report
+    environment:
+      PYTEST_ARGS: ${PYTEST_ARGS:-}
+      PYTEST_MARKER: ${PYTEST_MARKER:-}
     command: bash /app/scripts/run_tests_with_allure.sh
 
   allure-ui:

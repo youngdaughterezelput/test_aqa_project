@@ -1,3 +1,5 @@
 LOGIN_PATH = "/web/index.php/auth/login"
 REQUEST_PASSWORD_RESET_PATH = "/web/index.php/auth/requestPasswordResetCode"
+SEND_PASSWORD_RESET_PATH = "/web/index.php/auth/sendPasswordReset"
+REQUEST_RESET_PASSWORD_PATH = "/web/index.php/auth/requestResetPassword"
 DASHBOARD_PATH = "/web/index.php/dashboard/index"

@@ -115,6 +115,21 @@ Run Docker tests:
 make test-docker
 ```
 
+Run Docker tests by marker:
+
+```bash
+PYTEST_MARKER=smoke bash scripts/run_docker_tests.sh
+PYTEST_MARKER=smoke_reset bash scripts/run_docker_tests.sh
+PYTEST_ARGS="-m smoke_reset -k cancel" bash scripts/run_docker_tests.sh
+```
+
+Or with `make`:
+
+```bash
+make test-docker-smoke
+make test-docker-reset
+```
+
 Open Allure report:
 
 ```bash

@@ -1,0 +1,59 @@
+name: Publish Allure Report
+
+on:
+  workflow_run:
+    workflows:
+      - UI Tests
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: read
+
+jobs:
+  publish-allure:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Download Allure report artifact from UI Tests
+        if: github.event_name == 'workflow_run'
+        uses: dawidd6/action-download-artifact@v9
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: allure-report
+          path: allure-report
+
+      - name: Checkout repository
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v4
+
+      - name: Run UI tests in Docker
+        if: github.event_name == 'workflow_dispatch'
+        run: docker compose up --build --abort-on-container-exit --exit-code-from tests
+
+      - name: Stop Docker Compose services
+        if: github.event_name == 'workflow_dispatch' && always()
+        run: docker compose down --remove-orphans
+
+      - name: Verify Allure report exists
+        run: test -f allure-report/index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

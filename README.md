@@ -98,3 +98,22 @@ Detailed Allure and Jenkins setup is documented in [ALLURE_AND_JENKINS.md](/User
 - Successful login
 - Login with invalid password
 - Dashboard availability after login
+
+## GitHub Actions And Pages
+
+The repository includes:
+
+- `.github/workflows/ui-tests.yml` for running UI tests
+- `.github/workflows/allure-pages.yml` for publishing Allure HTML to GitHub Pages
+
+To enable published Allure reports:
+
+1. Open `Settings -> Pages` in your GitHub repository
+2. In `Source`, select `GitHub Actions`
+3. Run the `UI Tests` workflow
+4. After a successful run, the `Publish Allure Report` workflow will deploy the report
+
+You will then get a Pages URL like:
+
+```text
+https://<github-username>.github.io/<repository-name>/

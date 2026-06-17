@@ -1,4 +1,4 @@
-# OrangeHRM UI Tests
+# Test UI Tests
 
 UI test framework for OrangeHRM demo using Playwright, Pytest, Page Object, and Pydantic-based configuration.
 

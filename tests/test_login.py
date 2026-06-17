@@ -5,6 +5,7 @@ from config.test_data import (
     login_branding_container,
     login_branding_logo,
     login_social_icons,
+    reset_password_request_user,
 )
 
 
@@ -36,6 +37,33 @@ def test_reset_password_page_displays_expected_elements(login_page, reset_passwo
     login_page.click_forgot_password()
     reset_password_page.should_display_reset_password_form()
     reset_password_page.should_display_card_container()
+
+
+@pytest.mark.smoke_reset
+def test_reset_password_redirects_to_confirmation_page(login_page, reset_password_page):
+    login_page.open()
+    login_page.click_forgot_password()
+    reset_password_page.submit_reset_password_request(reset_password_request_user)
+    reset_password_page.should_redirect_to_confirmation_page()
+
+
+@pytest.mark.smoke_reset
+def test_reset_password_with_empty_username_shows_required_error(
+    login_page,
+    reset_password_page,):
+    login_page.open()
+    login_page.click_forgot_password()
+    reset_password_page.click_reset_password()
+    reset_password_page.should_remain_on_reset_password_page()
+    reset_password_page.should_show_required_error_for_username()
+
+
+@pytest.mark.smoke_reset
+def test_reset_password_cancel_redirects_to_login_page(login_page, reset_password_page):
+    login_page.open()
+    login_page.click_forgot_password()
+    reset_password_page.click_cancel()
+    reset_password_page.should_redirect_to_login_page()
 
 
 @pytest.mark.smoke

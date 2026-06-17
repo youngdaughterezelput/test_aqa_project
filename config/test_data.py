@@ -6,6 +6,10 @@ class LoginUser(BaseModel):
     password: str
 
 
+class ResetPasswordRequest(BaseModel):
+    username: str
+
+
 class UiElementCollection(BaseModel):
     name: str
     class_name: str
@@ -28,26 +32,38 @@ class PresentUiElementExpectation(BaseModel):
 
 admin_user = LoginUser(
     username="Admin",
-    password="admin123",
-)
+    password="admin123",)
+
+
+reset_password_request_user = ResetPasswordRequest(
+    username="Admin",)
 
 
 login_social_icons = UiElementCollection(
     name="Login social icons",
     class_name="oxd-icon orangehrm-sm-icon",
-    minimum_count=4,
-)
+    minimum_count=4,)
 
 
 login_branding_container = VisibleUiElementExpectation(
     name="Login branding container",
     selector_type="class",
-    selector_value="orangehrm-login-branding",
-)
+    selector_value="orangehrm-login-branding",)
 
 
 login_branding_logo = PresentUiElementExpectation(
     name="OrangeHRM logo image",
     selector_type="css",
-    selector_value='img[alt="orangehrm-logo"]',
-)
+    selector_value='img[alt="orangehrm-logo"]',)
+
+
+reset_password_required_message = VisibleUiElementExpectation(
+    name="Reset password required message",
+    selector_type="css",
+    selector_value=".oxd-input-group__message",)
+
+
+reset_password_success_title = VisibleUiElementExpectation(
+    name="Reset password success title",
+    selector_type="css",
+    selector_value=".orangehrm-forgot-password-title",)

@@ -13,8 +13,7 @@ class UiHelper:
         self.page.goto(
             f"{settings.base_url}{path}",
             wait_until="domcontentloaded",
-            timeout=settings.timeout,
-        )
+            timeout=settings.timeout,)
 
     def by_placeholder(self, text: str) -> Locator:
         return self.page.get_by_placeholder(text)
@@ -39,6 +38,13 @@ class UiHelper:
         if self.has_path(path):
             return
         expected_url_pattern = re.compile(rf".*{re.escape(path)}$")
+        expect(self.page).to_have_url(expected_url_pattern, timeout=settings.timeout)
+
+    def wait_for_any_path(self, paths: list[str]) -> None:
+        if any(self.has_path(path) for path in paths):
+            return
+        expected_url_pattern = re.compile(
+            rf".*({'|'.join(re.escape(path) for path in paths)})$")
         expect(self.page).to_have_url(expected_url_pattern, timeout=settings.timeout)
 
     def set_default_timeout(self) -> None:

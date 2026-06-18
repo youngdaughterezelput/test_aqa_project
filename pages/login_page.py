@@ -6,10 +6,14 @@ from config.test_data import (
     UiElementCollection,
     VisibleUiElementExpectation,)
 from helpers.locators import (
+    get_forgot_password_link,
+    get_invalid_credentials_alert,
+    get_login_button,
+    get_login_password_input,
+    get_login_title,
+    get_login_username_input,
     get_by_class,
-    get_by_placeholder,
-    get_by_role,
-    get_by_text,)
+)
 from helpers.paths import LOGIN_PATH
 from pages.base_page import BasePage
 
@@ -19,14 +23,12 @@ class LoginPage(BasePage):
 
     def __init__(self, helper):
         super().__init__(helper)
-        self.username_input = get_by_placeholder(helper, "Username")
-        self.password_input = get_by_placeholder(helper, "Password")
-        self.login_button = get_by_role(helper, "button", "Login")
-        self.invalid_credentials_alert = get_by_text(helper, "Invalid credentials")
-        self.login_title = get_by_role(helper, "heading", "Login")
-        self.forgot_password_link = get_by_class(
-            helper,
-            "oxd-text oxd-text--p orangehrm-login-forgot-header",)
+        self.username_input = get_login_username_input(helper)
+        self.password_input = get_login_password_input(helper)
+        self.login_button = get_login_button(helper)
+        self.invalid_credentials_alert = get_invalid_credentials_alert(helper)
+        self.login_title = get_login_title(helper)
+        self.forgot_password_link = get_forgot_password_link(helper)
 
     def open(self) -> None:
         with self.step("Open login page"):

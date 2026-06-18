@@ -9,6 +9,9 @@ test-docker-smoke:
 test-docker-reset:
 	PYTEST_MARKER=smoke_reset bash scripts/run_docker_tests.sh
 
+test-docker-board:
+	PYTEST_MARKER=smoke_dashboard bash scripts/run_docker_tests.sh
+
 allure:
 	bash scripts/open_allure_report.sh
 

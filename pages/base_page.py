@@ -27,6 +27,9 @@ class BasePage:
     def expect_visible(self, locator: Locator) -> None:
         expect(locator).to_be_visible(timeout=settings.timeout)
 
+    def scroll_to(self, locator: Locator) -> None:
+        self.helper.element.scroll_to(locator)
+
     def _get_element_locator(self, selector_type: str, selector_value: str, element_name: str):
         selector_map = {
             "class": lambda: get_by_class(self.helper, selector_value),

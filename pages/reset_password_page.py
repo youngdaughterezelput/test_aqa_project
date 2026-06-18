@@ -5,7 +5,12 @@ from config.test_data import (
     ResetPasswordRequest,
     reset_password_required_message,
     reset_password_success_title,)
-from helpers.locators import get_by_class, get_by_placeholder, get_by_role
+from helpers.locators import (
+    get_cancel_button,
+    get_reset_password_button,
+    get_reset_password_card_container,
+    get_reset_password_username_input,
+)
 from helpers.paths import (
     LOGIN_PATH,
     REQUEST_PASSWORD_RESET_PATH,
@@ -22,10 +27,10 @@ class ResetPasswordPage(BasePage):
 
     def __init__(self, helper):
         super().__init__(helper)
-        self.card_container = get_by_class(helper, "orangehrm-card-container")
-        self.username_input = get_by_placeholder(helper, "Username")
-        self.reset_password_button = get_by_role(helper, "button", "Reset Password")
-        self.cancel_button = get_by_role(helper, "button", "Cancel")
+        self.card_container = get_reset_password_card_container(helper)
+        self.username_input = get_reset_password_username_input(helper)
+        self.reset_password_button = get_reset_password_button(helper)
+        self.cancel_button = get_cancel_button(helper)
 
     def should_be_opened(self) -> None:
         with self.step("Verify reset password page URL"):

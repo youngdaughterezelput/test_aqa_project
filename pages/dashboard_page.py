@@ -35,140 +35,49 @@ class DashboardPage(BasePage):
         with self.step(f"Scroll to widget '{widget.title}'"):
             self.scroll_to(widget.chart_canvas)
 
-    def should_show_employee_distribution_pie_chart(self) -> None:
-        with self.step("Verify employee distribution pie chart and icon are visible"):
-            self._should_show_widget_icon_and_pie_chart(
-                self.employee_distribution_by_sub_unit_widget,
-                "employee distribution by sub unit",)
+    def should_show_widget_pie_chart(self, widget: PieChartWidgetComponent) -> None:
+        with self.step(f"Verify widget '{widget.title}' pie chart and icon are visible"):
+            self.scroll_to_widget(widget)
+            expect(widget.icon).to_be_visible(timeout=settings.timeout)
+            expect(widget.chart_canvas).to_be_visible(timeout=settings.timeout)
 
-    def hover_over_employee_distribution_segment(self) -> None:
-        with self.step("Hover over employee distribution pie chart segment"):
-            self._hover_over_widget_segment(
-                self.employee_distribution_by_sub_unit_widget,
-                "employee distribution by sub unit",)
+    def hover_over_widget_segment(self, widget: PieChartWidgetComponent) -> None:
+        with self.step(f"Hover over widget '{widget.title}' pie chart segment"):
+            self.scroll_to_widget(widget)
+            self.helper.element.hover_until_visible(
+                widget.chart_canvas,
+                widget.chart_tooltip,
+                self.helper.element.build_radial_hover_positions(widget.chart_canvas),)
 
-    def should_show_employee_distribution_tooltip(self) -> None:
-        with self.step("Verify employee distribution pie chart tooltip is visible"):
-            expect(self.employee_distribution_by_sub_unit_widget.chart_tooltip).to_be_visible(
-                timeout=settings.timeout)
+    def should_show_widget_tooltip(self, widget: PieChartWidgetComponent) -> None:
+        with self.step(f"Verify widget '{widget.title}' pie chart tooltip is visible"):
+            expect(widget.chart_tooltip).to_be_visible(timeout=settings.timeout)
 
-    def click_first_employee_distribution_legend_item(self) -> None:
-        with self.step("Click first employee distribution legend item"):
-            self._click_first_widget_legend_item(
-                self.employee_distribution_by_sub_unit_widget,
-                "employee distribution by sub unit",)
+    def click_first_widget_legend_item(self, widget: PieChartWidgetComponent) -> None:
+        with self.step(f"Click first legend item in widget '{widget.title}'"):
+            self.scroll_to_widget(widget)
+            self.helper.element.click(widget.first_legend_item)
 
-    def should_strike_through_first_employee_distribution_legend_item(self) -> None:
-        with self.step("Verify first employee distribution legend item is struck through"):
-            self._should_strike_through_first_widget_legend_item(
-                self.employee_distribution_by_sub_unit_widget,
-                "employee distribution by sub unit",)
-
-    def get_employee_distribution_chart_snapshot(self) -> str:
-        return self._get_widget_chart_snapshot(
-            self.employee_distribution_by_sub_unit_widget,
-            "employee distribution by sub unit",)
-
-    def wait_until_employee_distribution_chart_changes(self, previous_snapshot: str) -> str:
-        with self.step("Wait until employee distribution pie chart changes"):
-            return self._wait_until_widget_chart_changes(
-                self.employee_distribution_by_sub_unit_widget,
-                previous_snapshot,
-                "employee distribution by sub unit",)
-
-    def should_show_employee_distribution_by_location_pie_chart(self) -> None:
-        with self.step("Verify employee distribution by location pie chart and icon are visible"):
-            self._should_show_widget_icon_and_pie_chart(
-                self.employee_distribution_by_location_widget,
-                "employee distribution by location",)
-
-    def hover_over_employee_distribution_by_location_segment(self) -> None:
-        with self.step("Hover over employee distribution by location pie chart segment"):
-            self._hover_over_widget_segment(
-                self.employee_distribution_by_location_widget,
-                "employee distribution by location",)
-
-    def should_show_employee_distribution_by_location_tooltip(self) -> None:
-        with self.step("Verify employee distribution by location pie chart tooltip is visible"):
-            expect(self.employee_distribution_by_location_widget.chart_tooltip).to_be_visible(
-                timeout=settings.timeout)
-
-    def click_first_employee_distribution_by_location_legend_item(self) -> None:
-        with self.step("Click first employee distribution by location legend item"):
-            self._click_first_widget_legend_item(
-                self.employee_distribution_by_location_widget,
-                "employee distribution by location",)
-
-    def should_strike_through_first_employee_distribution_by_location_legend_item(
-        self,) -> None:
-        with self.step(
-            "Verify first employee distribution by location legend item is struck through"):
-            self._should_strike_through_first_widget_legend_item(
-                self.employee_distribution_by_location_widget,
-                "employee distribution by location",)
-
-    def get_employee_distribution_by_location_chart_snapshot(self) -> str:
-        return self._get_widget_chart_snapshot(
-            self.employee_distribution_by_location_widget,
-            "employee distribution by location",)
-
-    def wait_until_employee_distribution_by_location_chart_changes(
+    def should_strike_through_first_widget_legend_item(
         self,
-        previous_snapshot: str,) -> str:
-        with self.step("Wait until employee distribution by location pie chart changes"):
-            return self._wait_until_widget_chart_changes(
-                self.employee_distribution_by_location_widget,
-                previous_snapshot,
-                "employee distribution by location",)
+        widget: PieChartWidgetComponent,) -> None:
+        with self.step(f"Verify first legend item in widget '{widget.title}' is struck through"):
+            self.scroll_to_widget(widget)
+            expect(widget.first_legend_label).to_have_css(
+                "text-decoration-line",
+                "line-through",
+                timeout=settings.timeout,)
 
-    def _should_show_widget_icon_and_pie_chart(
-        self,
-        widget: PieChartWidgetComponent,
-        widget_name: str,) -> None:
-        self.scroll_to_widget(widget)
-        expect(widget.icon).to_be_visible(timeout=settings.timeout)
-        expect(widget.chart_canvas).to_be_visible(timeout=settings.timeout)
-
-    def _hover_over_widget_segment(
-        self,
-        widget: PieChartWidgetComponent,
-        widget_name: str,) -> None:
-        self.scroll_to_widget(widget)
-        self.helper.element.hover_until_visible(
-            widget.chart_canvas,
-            widget.chart_tooltip,
-            self.helper.element.build_radial_hover_positions(widget.chart_canvas),)
-
-    def _click_first_widget_legend_item(
-        self,
-        widget: PieChartWidgetComponent,
-        widget_name: str,) -> None:
-        self.scroll_to_widget(widget)
-        self.helper.element.click(widget.first_legend_item)
-
-    def _should_strike_through_first_widget_legend_item(
-        self,
-        widget: PieChartWidgetComponent,
-        widget_name: str,) -> None:
-        self.scroll_to_widget(widget)
-        expect(widget.first_legend_label).to_have_css(
-            "text-decoration-line",
-            "line-through",
-            timeout=settings.timeout,)
-
-    def _get_widget_chart_snapshot(
-        self,
-        widget: PieChartWidgetComponent,
-        widget_name: str,) -> str:
+    def get_widget_chart_snapshot(self, widget: PieChartWidgetComponent) -> str:
         self.scroll_to_widget(widget)
         return widget.chart_canvas.evaluate("canvas => canvas.toDataURL()")
 
-    def _wait_until_widget_chart_changes(
+    def wait_until_widget_chart_changes(
         self,
         widget: PieChartWidgetComponent,
-        previous_snapshot: str,
-        widget_name: str,) -> str:
-        self.scroll_to_widget(widget)
-        return self.helper.element.wait_until_canvas_changes(
-            widget.chart_canvas,
-            previous_snapshot,)
+        previous_snapshot: str,) -> str:
+        with self.step(f"Wait until widget '{widget.title}' pie chart changes"):
+            self.scroll_to_widget(widget)
+            return self.helper.element.wait_until_canvas_changes(
+                widget.chart_canvas,
+                previous_snapshot,)

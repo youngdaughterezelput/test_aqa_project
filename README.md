@@ -60,7 +60,7 @@ The project uses `pydantic-settings`.
 bash scripts/run_docker_tests.sh
 ```
 
-Or with `make`:
+Or with `make` (example):
 
 ```bash
 make test-docker

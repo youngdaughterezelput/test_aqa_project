@@ -1,6 +1,32 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from playwright.sync_api import Locator
 
-from helpers.ui_helper import UiHelper
+if TYPE_CHECKING:
+    from helpers.ui_helper import UiHelper
+
+
+LOGIN_SOCIAL_ICONS_CLASS = "oxd-icon orangehrm-sm-icon"
+LOGIN_BRANDING_CONTAINER_CLASS = "orangehrm-login-branding"
+LOGIN_BRANDING_LOGO_CSS = 'img[alt="orangehrm-logo"]'
+RESET_PASSWORD_REQUIRED_MESSAGE_CSS = (
+    "#app > div.orangehrm-forgot-password-container > "
+    "div.orangehrm-forgot-password-wrapper > div > form > "
+    "div.oxd-form-row > div > span")
+RESET_PASSWORD_SUCCESS_TITLE_CSS = ".orangehrm-forgot-password-title"
+SIDEBAR_CONTAINER_CLASS = "oxd-sidepanel-body"
+SIDEBAR_COLLAPSE_BUTTON_CSS = (
+    "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-left)")
+SIDEBAR_EXPAND_BUTTON_CSS = (
+    "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-right)")
+USER_DROPDOWN_CLASS = "oxd-userdropdown"
+FORGOT_PASSWORD_LINK_CLASS = "oxd-text oxd-text--p orangehrm-login-forgot-header"
+RESET_PASSWORD_CARD_CONTAINER_CLASS = "orangehrm-card-container"
+DASHBOARD_PIE_CHART_TOOLTIP_CSS = ".oxd-pie-chart-tooltip"
+DASHBOARD_WIDGET_ICON_CSS = "i.oxd-icon.bi-pie-chart-fill.orangehrm-dashboard-widget-icon"
+OXD_SHEET_DASHBOARD_WIDGET_CSS = "div.oxd-sheet.orangehrm-dashboard-widget"
 
 
 def get_by_placeholder(helper: UiHelper, text: str) -> Locator:
@@ -21,3 +47,103 @@ def get_by_class(helper: UiHelper, class_name: str) -> Locator:
 
 def get_by_css(helper: UiHelper, selector: str) -> Locator:
     return helper.by_css(selector)
+
+
+def get_dashboard_header(helper: UiHelper) -> Locator:
+    return get_by_role(helper, "heading", "Dashboard")
+
+
+def get_user_dropdown(helper: UiHelper) -> Locator:
+    return get_by_class(helper, USER_DROPDOWN_CLASS)
+
+
+def get_login_username_input(helper: UiHelper) -> Locator:
+    return get_by_placeholder(helper, "Username")
+
+
+def get_login_password_input(helper: UiHelper) -> Locator:
+    return get_by_placeholder(helper, "Password")
+
+
+def get_login_button(helper: UiHelper) -> Locator:
+    return get_by_role(helper, "button", "Login")
+
+
+def get_invalid_credentials_alert(helper: UiHelper) -> Locator:
+    return get_by_text(helper, "Invalid credentials")
+
+
+def get_login_title(helper: UiHelper) -> Locator:
+    return get_by_role(helper, "heading", "Login")
+
+
+def get_forgot_password_link(helper: UiHelper) -> Locator:
+    return get_by_class(helper, FORGOT_PASSWORD_LINK_CLASS)
+
+
+def get_reset_password_card_container(helper: UiHelper) -> Locator:
+    return get_by_class(helper, RESET_PASSWORD_CARD_CONTAINER_CLASS)
+
+
+def get_reset_password_username_input(helper: UiHelper) -> Locator:
+    return get_by_placeholder(helper, "Username")
+
+
+def get_reset_password_button(helper: UiHelper) -> Locator:
+    return get_by_role(helper, "button", "Reset Password")
+
+
+def get_cancel_button(helper: UiHelper) -> Locator:
+    return get_by_role(helper, "button", "Cancel")
+
+
+def get_sidebar_container(helper: UiHelper) -> Locator:
+    return get_by_class(helper, SIDEBAR_CONTAINER_CLASS)
+
+
+def get_sidebar_collapse_button(helper: UiHelper) -> Locator:
+    return get_by_css(helper, SIDEBAR_COLLAPSE_BUTTON_CSS)
+
+
+def get_sidebar_expand_button(helper: UiHelper) -> Locator:
+    return get_by_css(helper, SIDEBAR_EXPAND_BUTTON_CSS)
+
+
+def _dashboard_widget_css(title: str) -> str:
+    return (
+        f"{OXD_SHEET_DASHBOARD_WIDGET_CSS}:has("
+        f".orangehrm-dashboard-widget-name p:has-text('{title}')"
+        f")")
+
+
+def get_dashboard_widget_root(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, _dashboard_widget_css(title))
+
+
+def get_dashboard_widget_icon(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} {DASHBOARD_WIDGET_ICON_CSS}")
+
+
+def get_dashboard_widget_chart_canvas(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} div.oxd-pie-chart canvas")
+
+
+def get_dashboard_widget_chart_tooltip(helper: UiHelper) -> Locator:
+    return get_by_css(helper, DASHBOARD_PIE_CHART_TOOLTIP_CSS)
+
+
+def get_dashboard_widget_legend(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} ul.oxd-chart-legend")
+
+
+def get_dashboard_widget_first_legend_item(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} ul.oxd-chart-legend li:first-child")
+
+
+def get_dashboard_widget_first_legend_label(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(
+        helper,
+        (
+            f"{_dashboard_widget_css(title)} "
+            "ul.oxd-chart-legend li:first-child span.oxd-text.oxd-text--span"
+        ),)

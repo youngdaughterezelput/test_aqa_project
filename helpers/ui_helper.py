@@ -1,13 +1,133 @@
+import math
 import re
 
 from playwright.sync_api import Locator, Page, expect
 
+from components.sidebar_component import SidebarComponent
 from config.settings import settings
+
+
+class ElementUiHelper:
+    def __init__(self, helper: "UiHelper"):
+        self.helper = helper
+
+    def is_in_viewport(self, locator: Locator) -> bool:
+        return locator.evaluate(
+            """element => {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top >= 0 &&
+                    rect.left >= 0 &&
+                    rect.bottom <= window.innerHeight &&
+                    rect.right <= window.innerWidth
+                );
+            }""")
+
+    def scroll_to(
+        self,
+        locator: Locator,
+        *,
+        max_attempts: int = 8,
+        step: int = 700,) -> None:
+        for _ in range(max_attempts):
+            if locator.is_visible() and self.is_in_viewport(locator):
+                return
+            self.helper.page.mouse.wheel(0, step)
+        locator.scroll_into_view_if_needed(timeout=settings.timeout)
+        expect(locator).to_be_visible(timeout=settings.timeout)
+
+    def scroll_until_visible(
+        self,
+        locator: Locator,
+        *,
+        max_attempts: int = 8,
+        step: int = 700,) -> None:
+        self.scroll_to(locator, max_attempts=max_attempts, step=step)
+
+    def hover(self, locator: Locator, position: dict[str, float] | None = None) -> None:
+        locator.hover(position=position, timeout=settings.timeout)
+
+    def click(self, locator: Locator) -> None:
+        locator.click(timeout=settings.timeout)
+
+    def build_radial_hover_positions(
+        self,
+        locator: Locator,
+        *,
+        radius_factors: tuple[float, ...] = (0.55, 0.8, 1.0),
+        angles: tuple[int, ...] = (0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330),
+        base_radius_factor: float = 0.32,) -> list[dict[str, float]]:
+        box = locator.bounding_box()
+        if box is None:
+            raise AssertionError("Element bounding box is unavailable for radial hover.")
+        width = box["width"]
+        height = box["height"]
+        center_x = width / 2
+        center_y = height / 2
+        base_radius = min(width, height) * base_radius_factor
+        positions: list[dict[str, float]] = []
+        for radius_factor in radius_factors:
+            radius = base_radius * radius_factor
+            for angle in angles:
+                radians = math.radians(angle)
+                positions.append(
+                    {
+                        "x": center_x + radius * math.cos(radians),
+                        "y": center_y - radius * math.sin(radians),
+                    })
+        return positions
+
+    def hover_until_visible(
+        self,
+        locator: Locator,
+        target_locator: Locator,
+        positions: list[dict[str, float]],) -> None:
+        for position in positions:
+            self.hover(locator, position=position)
+            self.helper.page.wait_for_timeout(150)
+            if target_locator.count() > 0 and target_locator.first.is_visible():
+                return
+        expect(target_locator.first).to_be_visible(timeout=settings.timeout)
+
+    def wait_until_canvas_changes(self, locator: Locator, previous_snapshot: str) -> str:
+        self.helper.page.wait_for_function(
+            """([canvas, previousSnapshot]) => canvas.toDataURL() !== previousSnapshot""",
+            arg=[locator.element_handle(), previous_snapshot],
+            timeout=settings.timeout,)
+        return locator.evaluate("canvas => canvas.toDataURL()")
+
+
+class SidebarUiHelper:
+    def __init__(self, helper: "UiHelper"):
+        self.helper = helper
+
+    def is_open(self) -> bool:
+        sidebar = SidebarComponent(self.helper)
+        return sidebar.collapse_button.is_visible()
+
+    def ensure_open(self) -> None:
+        sidebar = SidebarComponent(self.helper)
+        if self.is_open():
+            expect(sidebar.collapse_button).to_be_visible(timeout=settings.timeout)
+            return
+        expect(sidebar.expand_button).to_be_visible(timeout=settings.timeout)
+        sidebar.expand_button.click()
+        expect(sidebar.collapse_button).to_be_visible(timeout=settings.timeout)
+        expect(sidebar.expand_button).not_to_be_visible(timeout=settings.timeout)
+
+    def collapse(self) -> None:
+        sidebar = SidebarComponent(self.helper)
+        self.ensure_open()
+        sidebar.collapse_button.click()
+        expect(sidebar.expand_button).to_be_visible(timeout=settings.timeout)
+        expect(sidebar.collapse_button).not_to_be_visible(timeout=settings.timeout)
 
 
 class UiHelper:
     def __init__(self, page: Page):
         self.page = page
+        self.element = ElementUiHelper(self)
+        self.sidebar = SidebarUiHelper(self)
 
     def open_path(self, path: str) -> None:
         self.page.goto(

@@ -1,5 +1,13 @@
 from pydantic import BaseModel, Field
 
+from helpers.locators import (
+    LOGIN_BRANDING_CONTAINER_CLASS,
+    LOGIN_BRANDING_LOGO_CSS,
+    LOGIN_SOCIAL_ICONS_CLASS,
+    RESET_PASSWORD_REQUIRED_MESSAGE_CSS,
+    RESET_PASSWORD_SUCCESS_TITLE_CSS,
+)
+
 
 class LoginUser(BaseModel):
     username: str
@@ -41,33 +49,29 @@ reset_password_request_user = ResetPasswordRequest(
 
 login_social_icons = UiElementCollection(
     name="Login social icons",
-    class_name="oxd-icon orangehrm-sm-icon",
+    class_name=LOGIN_SOCIAL_ICONS_CLASS,
     minimum_count=4,)
 
 
 login_branding_container = VisibleUiElementExpectation(
     name="Login branding container",
     selector_type="class",
-    selector_value="orangehrm-login-branding",)
+    selector_value=LOGIN_BRANDING_CONTAINER_CLASS,)
 
 
 login_branding_logo = PresentUiElementExpectation(
     name="OrangeHRM logo image",
     selector_type="css",
-    selector_value='img[alt="orangehrm-logo"]',)
+    selector_value=LOGIN_BRANDING_LOGO_CSS,)
 
 
 reset_password_required_message = VisibleUiElementExpectation(
     name="Reset password required message",
     selector_type="css",
-    selector_value=(
-        "#app > div.orangehrm-forgot-password-container > "
-        "div.orangehrm-forgot-password-wrapper > div > form > "
-        "div.oxd-form-row > div > span"
-    ),)
+    selector_value=RESET_PASSWORD_REQUIRED_MESSAGE_CSS,)
 
 
 reset_password_success_title = VisibleUiElementExpectation(
     name="Reset password success title",
     selector_type="css",
-    selector_value=".orangehrm-forgot-password-title",)
+    selector_value=RESET_PASSWORD_SUCCESS_TITLE_CSS,)

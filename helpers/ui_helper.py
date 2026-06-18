@@ -1,3 +1,4 @@
+import math
 import re
 
 from playwright.sync_api import Locator, Page, expect
@@ -49,17 +50,44 @@ class ElementUiHelper:
     def click(self, locator: Locator) -> None:
         locator.click(timeout=settings.timeout)
 
+    def build_radial_hover_positions(
+        self,
+        locator: Locator,
+        *,
+        radius_factors: tuple[float, ...] = (0.55, 0.8, 1.0),
+        angles: tuple[int, ...] = (0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330),
+        base_radius_factor: float = 0.32,) -> list[dict[str, float]]:
+        box = locator.bounding_box()
+        if box is None:
+            raise AssertionError("Element bounding box is unavailable for radial hover.")
+        width = box["width"]
+        height = box["height"]
+        center_x = width / 2
+        center_y = height / 2
+        base_radius = min(width, height) * base_radius_factor
+        positions: list[dict[str, float]] = []
+        for radius_factor in radius_factors:
+            radius = base_radius * radius_factor
+            for angle in angles:
+                radians = math.radians(angle)
+                positions.append(
+                    {
+                        "x": center_x + radius * math.cos(radians),
+                        "y": center_y - radius * math.sin(radians),
+                    })
+        return positions
+
     def hover_until_visible(
         self,
         locator: Locator,
         target_locator: Locator,
-        positions: list[dict[str, float]],
-    ) -> None:
+        positions: list[dict[str, float]],) -> None:
         for position in positions:
             self.hover(locator, position=position)
+            self.helper.page.wait_for_timeout(150)
             if target_locator.count() > 0 and target_locator.first.is_visible():
                 return
-        expect(target_locator).to_be_visible(timeout=settings.timeout)
+        expect(target_locator.first).to_be_visible(timeout=settings.timeout)
 
     def wait_until_canvas_changes(self, locator: Locator, previous_snapshot: str) -> str:
         self.helper.page.wait_for_function(

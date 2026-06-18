@@ -14,49 +14,19 @@ LOGIN_BRANDING_LOGO_CSS = 'img[alt="orangehrm-logo"]'
 RESET_PASSWORD_REQUIRED_MESSAGE_CSS = (
     "#app > div.orangehrm-forgot-password-container > "
     "div.orangehrm-forgot-password-wrapper > div > form > "
-    "div.oxd-form-row > div > span"
-)
+    "div.oxd-form-row > div > span")
 RESET_PASSWORD_SUCCESS_TITLE_CSS = ".orangehrm-forgot-password-title"
 SIDEBAR_CONTAINER_CLASS = "oxd-sidepanel-body"
 SIDEBAR_COLLAPSE_BUTTON_CSS = (
-    "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-left)"
-)
+    "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-left)")
 SIDEBAR_EXPAND_BUTTON_CSS = (
-    "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-right)"
-)
+    "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-right)")
 USER_DROPDOWN_CLASS = "oxd-userdropdown"
 FORGOT_PASSWORD_LINK_CLASS = "oxd-text oxd-text--p orangehrm-login-forgot-header"
 RESET_PASSWORD_CARD_CONTAINER_CLASS = "orangehrm-card-container"
-EMPLOYEE_DISTRIBUTION_WIDGET_CSS = (
-    "div.oxd-sheet.orangehrm-dashboard-widget:has("
-    ".orangehrm-dashboard-widget-name p:has-text('Employee Distribution by Sub Unit')"
-    ")"
-)
-EMPLOYEE_DISTRIBUTION_CHART_CANVAS_CSS = (
-    "div.oxd-sheet.orangehrm-dashboard-widget:has("
-    ".orangehrm-dashboard-widget-name p:has-text('Employee Distribution by Sub Unit')"
-    ") "
-    "div.oxd-pie-chart canvas"
-)
-EMPLOYEE_DISTRIBUTION_CHART_TOOLTIP_CSS = ".oxd-pie-chart-tooltip"
-EMPLOYEE_DISTRIBUTION_LEGEND_CSS = (
-    "div.oxd-sheet.orangehrm-dashboard-widget:has("
-    ".orangehrm-dashboard-widget-name p:has-text('Employee Distribution by Sub Unit')"
-    ") "
-    "ul.oxd-chart-legend"
-)
-EMPLOYEE_DISTRIBUTION_FIRST_LEGEND_ITEM_CSS = (
-    "div.oxd-sheet.orangehrm-dashboard-widget:has("
-    ".orangehrm-dashboard-widget-name p:has-text('Employee Distribution by Sub Unit')"
-    ") "
-    "ul.oxd-chart-legend li:first-child"
-)
-EMPLOYEE_DISTRIBUTION_FIRST_LEGEND_LABEL_CSS = (
-    "div.oxd-sheet.orangehrm-dashboard-widget:has("
-    ".orangehrm-dashboard-widget-name p:has-text('Employee Distribution by Sub Unit')"
-    ") "
-    "ul.oxd-chart-legend li:first-child span.oxd-text.oxd-text--span"
-)
+DASHBOARD_PIE_CHART_TOOLTIP_CSS = ".oxd-pie-chart-tooltip"
+DASHBOARD_WIDGET_ICON_CSS = "i.oxd-icon.bi-pie-chart-fill.orangehrm-dashboard-widget-icon"
+OXD_SHEET_DASHBOARD_WIDGET_CSS = "div.oxd-sheet.orangehrm-dashboard-widget"
 
 
 def get_by_placeholder(helper: UiHelper, text: str) -> Locator:
@@ -139,25 +109,41 @@ def get_sidebar_expand_button(helper: UiHelper) -> Locator:
     return get_by_css(helper, SIDEBAR_EXPAND_BUTTON_CSS)
 
 
-def get_employee_distribution_widget(helper: UiHelper) -> Locator:
-    return get_by_css(helper, EMPLOYEE_DISTRIBUTION_WIDGET_CSS)
+def _dashboard_widget_css(title: str) -> str:
+    return (
+        f"{OXD_SHEET_DASHBOARD_WIDGET_CSS}:has("
+        f".orangehrm-dashboard-widget-name p:has-text('{title}')"
+        f")")
 
 
-def get_employee_distribution_chart_canvas(helper: UiHelper) -> Locator:
-    return get_by_css(helper, EMPLOYEE_DISTRIBUTION_CHART_CANVAS_CSS)
+def get_dashboard_widget_root(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, _dashboard_widget_css(title))
 
 
-def get_employee_distribution_chart_tooltip(helper: UiHelper) -> Locator:
-    return get_by_css(helper, EMPLOYEE_DISTRIBUTION_CHART_TOOLTIP_CSS)
+def get_dashboard_widget_icon(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} {DASHBOARD_WIDGET_ICON_CSS}")
 
 
-def get_employee_distribution_legend(helper: UiHelper) -> Locator:
-    return get_by_css(helper, EMPLOYEE_DISTRIBUTION_LEGEND_CSS)
+def get_dashboard_widget_chart_canvas(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} div.oxd-pie-chart canvas")
 
 
-def get_employee_distribution_first_legend_item(helper: UiHelper) -> Locator:
-    return get_by_css(helper, EMPLOYEE_DISTRIBUTION_FIRST_LEGEND_ITEM_CSS)
+def get_dashboard_widget_chart_tooltip(helper: UiHelper) -> Locator:
+    return get_by_css(helper, DASHBOARD_PIE_CHART_TOOLTIP_CSS)
 
 
-def get_employee_distribution_first_legend_label(helper: UiHelper) -> Locator:
-    return get_by_css(helper, EMPLOYEE_DISTRIBUTION_FIRST_LEGEND_LABEL_CSS)
+def get_dashboard_widget_legend(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} ul.oxd-chart-legend")
+
+
+def get_dashboard_widget_first_legend_item(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(helper, f"{_dashboard_widget_css(title)} ul.oxd-chart-legend li:first-child")
+
+
+def get_dashboard_widget_first_legend_label(helper: UiHelper, title: str) -> Locator:
+    return get_by_css(
+        helper,
+        (
+            f"{_dashboard_widget_css(title)} "
+            "ul.oxd-chart-legend li:first-child span.oxd-text.oxd-text--span"
+        ),)

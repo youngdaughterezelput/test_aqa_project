@@ -85,3 +85,9 @@ def test_login_page_displays_branding(login_page):
 def test_login_page_copyright_contains_link(login_page):
     login_page.open()
     login_page.should_have_copyright_link()
+
+
+@pytest.mark.smoke
+def test_login_page_form_container_has_content(login_page):
+    login_page.open()
+    login_page.should_have_login_form_content()

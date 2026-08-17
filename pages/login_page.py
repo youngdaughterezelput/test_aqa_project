@@ -12,6 +12,7 @@ from helpers.locators import (
     get_invalid_credentials_alert,
     get_login_button,
     get_login_copyright_link,
+    get_login_form_content,
     get_login_password_input,
     get_login_title,
     get_login_username_input,
@@ -33,6 +34,7 @@ class LoginPage(BasePage):
         self.login_title = get_login_title(helper)
         self.forgot_password_link = get_forgot_password_link(helper)
         self.copyright_link = get_login_copyright_link(helper)
+        self.login_form_content = get_login_form_content(helper)
 
     def open(self) -> None:
         with self.step("Open login page"):
@@ -60,6 +62,14 @@ class LoginPage(BasePage):
                 "href",
                 re.compile(r"^https?://.+"),
                 timeout=settings.timeout,)
+
+    def should_have_login_form_content(self) -> None:
+        with self.step("Verify login form container has content"):
+            expect(self.login_form_content).to_be_visible(timeout=settings.timeout)
+            actual_content = self.login_form_content.text_content(
+                timeout=settings.timeout,)
+            assert actual_content and actual_content.strip(), (
+                "Login form container is visible, but its text content is empty.")
 
     def should_have_ui_element_collection(self, collection: UiElementCollection) -> None:
         with self.step(f"Verify UI collection '{collection.name}'"):

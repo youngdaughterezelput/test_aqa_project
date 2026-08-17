@@ -16,12 +16,35 @@ LOGIN_COPYRIGHT_LINK_CSS = (
     "div > div.orangehrm-login-slot > div.orangehrm-login-footer > "
     "div.orangehrm-copyright-wrapper > p:nth-child(2) > a"
 )
+LOGIN_FORM_CONTENT_CSS = (
+    "#app > div.orangehrm-login-layout > div > div.orangehrm-login-container > "
+    "div > div.orangehrm-login-slot > div.orangehrm-login-form > div > div"
+)
 RESET_PASSWORD_REQUIRED_MESSAGE_CSS = (
     "#app > div.orangehrm-forgot-password-container > "
     "div.orangehrm-forgot-password-wrapper > div > form > "
     "div.oxd-form-row > div > span")
 RESET_PASSWORD_SUCCESS_TITLE_CSS = ".orangehrm-forgot-password-title"
 SIDEBAR_CONTAINER_CLASS = "oxd-sidepanel-body"
+HEADER_CONTAINER_CSS = (
+    "#app > div.oxd-layout.orangehrm-upgrade-layout > div.oxd-layout-navigation > "
+    "header > div.oxd-topbar-header"
+)
+HEADER_UPGRADE_BUTTON_CSS = (
+    f"{HEADER_CONTAINER_CSS} > div.orangehrm-upgrade-container > a > button"
+)
+HEADER_USER_MENU_TRIGGER_CSS = (
+    f"{HEADER_CONTAINER_CSS} > div.oxd-topbar-header-userarea > ul > li > span"
+)
+HEADER_USER_MENU_CSS = (
+    f"{HEADER_CONTAINER_CSS} > div.oxd-topbar-header-userarea > ul > li > ul"
+)
+SIDEBAR_MENU_CSS = (
+    "#app > div.oxd-layout.orangehrm-upgrade-layout > div.oxd-layout-navigation > "
+    "aside > nav > div.oxd-sidepanel-body > div > div"
+)
+SIDEBAR_SEARCH_INPUT_CSS = 'aside input[placeholder="Search"]'
+SIDEBAR_MENU_ITEM_CSS = "a.oxd-main-menu-item"
 SIDEBAR_COLLAPSE_BUTTON_CSS = (
     "button.oxd-icon-button.oxd-main-menu-button:has(i.bi-chevron-left)")
 SIDEBAR_EXPAND_BUTTON_CSS = (
@@ -62,6 +85,22 @@ def get_user_dropdown(helper: UiHelper) -> Locator:
     return get_by_class(helper, USER_DROPDOWN_CLASS)
 
 
+def get_header_container(helper: UiHelper) -> Locator:
+    return get_by_css(helper, HEADER_CONTAINER_CSS)
+
+
+def get_header_upgrade_button(helper: UiHelper) -> Locator:
+    return get_by_css(helper, HEADER_UPGRADE_BUTTON_CSS)
+
+
+def get_header_user_menu_trigger(helper: UiHelper) -> Locator:
+    return get_by_css(helper, HEADER_USER_MENU_TRIGGER_CSS)
+
+
+def get_header_user_menu(helper: UiHelper) -> Locator:
+    return get_by_css(helper, HEADER_USER_MENU_CSS)
+
+
 def get_login_username_input(helper: UiHelper) -> Locator:
     return get_by_placeholder(helper, "Username")
 
@@ -90,6 +129,10 @@ def get_login_copyright_link(helper: UiHelper) -> Locator:
     return get_by_css(helper, LOGIN_COPYRIGHT_LINK_CSS)
 
 
+def get_login_form_content(helper: UiHelper) -> Locator:
+    return get_by_css(helper, LOGIN_FORM_CONTENT_CSS)
+
+
 def get_reset_password_card_container(helper: UiHelper) -> Locator:
     return get_by_class(helper, RESET_PASSWORD_CARD_CONTAINER_CLASS)
 
@@ -116,6 +159,22 @@ def get_sidebar_collapse_button(helper: UiHelper) -> Locator:
 
 def get_sidebar_expand_button(helper: UiHelper) -> Locator:
     return get_by_css(helper, SIDEBAR_EXPAND_BUTTON_CSS)
+
+
+def get_sidebar_menu(helper: UiHelper) -> Locator:
+    return get_by_css(helper, SIDEBAR_MENU_CSS)
+
+
+def get_sidebar_search_input(helper: UiHelper) -> Locator:
+    return get_by_css(helper, SIDEBAR_SEARCH_INPUT_CSS)
+
+
+def get_sidebar_menu_items(helper: UiHelper) -> Locator:
+    return get_by_css(helper, f"{SIDEBAR_MENU_CSS} {SIDEBAR_MENU_ITEM_CSS}")
+
+
+def get_sidebar_menu_item(helper: UiHelper, name: str) -> Locator:
+    return get_sidebar_menu_items(helper).filter(has_text=name)
 
 
 def _dashboard_widget_css(title: str) -> str:

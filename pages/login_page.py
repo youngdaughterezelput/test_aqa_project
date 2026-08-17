@@ -1,3 +1,5 @@
+import re
+
 from playwright.sync_api import expect
 from config.settings import settings
 from config.test_data import (
@@ -9,6 +11,7 @@ from helpers.locators import (
     get_forgot_password_link,
     get_invalid_credentials_alert,
     get_login_button,
+    get_login_copyright_link,
     get_login_password_input,
     get_login_title,
     get_login_username_input,
@@ -29,6 +32,7 @@ class LoginPage(BasePage):
         self.invalid_credentials_alert = get_invalid_credentials_alert(helper)
         self.login_title = get_login_title(helper)
         self.forgot_password_link = get_forgot_password_link(helper)
+        self.copyright_link = get_login_copyright_link(helper)
 
     def open(self) -> None:
         with self.step("Open login page"):
@@ -48,6 +52,14 @@ class LoginPage(BasePage):
     def click_forgot_password(self) -> None:
         with self.step("Click forgot password link"):
             self.forgot_password_link.click()
+
+    def should_have_copyright_link(self) -> None:
+        with self.step("Verify copyright text contains a link"):
+            expect(self.copyright_link).to_be_visible(timeout=settings.timeout)
+            expect(self.copyright_link).to_have_attribute(
+                "href",
+                re.compile(r"^https?://.+"),
+                timeout=settings.timeout,)
 
     def should_have_ui_element_collection(self, collection: UiElementCollection) -> None:
         with self.step(f"Verify UI collection '{collection.name}'"):

@@ -11,6 +11,11 @@ if TYPE_CHECKING:
 LOGIN_SOCIAL_ICONS_CLASS = "oxd-icon orangehrm-sm-icon"
 LOGIN_BRANDING_CONTAINER_CLASS = "orangehrm-login-branding"
 LOGIN_BRANDING_LOGO_CSS = 'img[alt="orangehrm-logo"]'
+LOGIN_COPYRIGHT_LINK_CSS = (
+    "#app > div.orangehrm-login-layout > div > div.orangehrm-login-container > "
+    "div > div.orangehrm-login-slot > div.orangehrm-login-footer > "
+    "div.orangehrm-copyright-wrapper > p:nth-child(2) > a"
+)
 RESET_PASSWORD_REQUIRED_MESSAGE_CSS = (
     "#app > div.orangehrm-forgot-password-container > "
     "div.orangehrm-forgot-password-wrapper > div > form > "
@@ -79,6 +84,10 @@ def get_login_title(helper: UiHelper) -> Locator:
 
 def get_forgot_password_link(helper: UiHelper) -> Locator:
     return get_by_class(helper, FORGOT_PASSWORD_LINK_CLASS)
+
+
+def get_login_copyright_link(helper: UiHelper) -> Locator:
+    return get_by_css(helper, LOGIN_COPYRIGHT_LINK_CSS)
 
 
 def get_reset_password_card_container(helper: UiHelper) -> Locator:

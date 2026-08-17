@@ -35,13 +35,21 @@ UI test framework for OrangeHRM demo using Playwright, Pytest, Page Object, and 
 
 ## Setup
 
+The project uses Python 3.12.7. If you use `pyenv`, select the project version
+before creating the virtual environment:
+
 ```bash
+pyenv local 3.12.7
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
-playwright install
-pytest -v
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m playwright install
+python -m pytest -v
 ```
+
+If `.venv` was previously created with another Python version, remove and recreate
+it after selecting Python 3.12.7.
 
 Optional: create `.env` if you want to override default settings.
 

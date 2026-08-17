@@ -79,3 +79,9 @@ def test_login_page_displays_branding(login_page):
     login_page.open()
     login_page.should_have_visible_ui_element(login_branding_container)
     login_page.should_have_present_ui_element(login_branding_logo)
+
+
+@pytest.mark.smoke
+def test_login_page_copyright_contains_link(login_page):
+    login_page.open()
+    login_page.should_have_copyright_link()

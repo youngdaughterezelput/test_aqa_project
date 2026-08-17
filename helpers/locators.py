@@ -41,7 +41,7 @@ HEADER_USER_MENU_CSS = (
 )
 SIDEBAR_MENU_CSS = (
     "#app > div.oxd-layout.orangehrm-upgrade-layout > div.oxd-layout-navigation > "
-    "aside > nav > div.oxd-sidepanel-body > div > div"
+    "aside > nav ul.oxd-main-menu"
 )
 SIDEBAR_SEARCH_INPUT_CSS = 'aside input[placeholder="Search"]'
 SIDEBAR_MENU_ITEM_CSS = "a.oxd-main-menu-item"

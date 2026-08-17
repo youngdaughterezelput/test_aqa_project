@@ -1,5 +1,7 @@
 import pytest
 
+from helpers.paths import ADMIN_USERS_PATH
+
 
 def open_dashboard(login_page, dashboard_page, admin_user) -> None:
     login_page.open()
@@ -12,6 +14,39 @@ def open_dashboard(login_page, dashboard_page, admin_user) -> None:
 def test_dashboard_is_available_for_authorized_user(login_page, dashboard_page, admin_user):
     open_dashboard(login_page, dashboard_page, admin_user)
     dashboard_page.collapse_sidebar()
+
+
+@pytest.mark.smoke_dashboard
+@pytest.mark.smoke
+def test_dashboard_upgrade_button_is_available(login_page, dashboard_page, admin_user):
+    open_dashboard(login_page, dashboard_page, admin_user)
+    dashboard_page.should_have_available_upgrade_button()
+
+
+@pytest.mark.smoke_dashboard
+def test_dashboard_user_menu_can_be_opened(login_page, dashboard_page, admin_user):
+    open_dashboard(login_page, dashboard_page, admin_user)
+    dashboard_page.open_user_menu()
+    dashboard_page.should_have_open_user_menu()
+
+
+@pytest.mark.smoke_dashboard
+def test_dashboard_sidebar_contains_menu_items(login_page, dashboard_page, admin_user):
+    open_dashboard(login_page, dashboard_page, admin_user)
+    dashboard_page.should_have_sidebar_menu_items()
+
+
+@pytest.mark.smoke_dashboard
+def test_dashboard_sidebar_menu_item_opens_page(login_page, dashboard_page, admin_user):
+    open_dashboard(login_page, dashboard_page, admin_user)
+    dashboard_page.open_sidebar_menu_item("Admin", ADMIN_USERS_PATH)
+
+
+@pytest.mark.smoke_dashboard
+def test_dashboard_sidebar_search_filters_menu_items(login_page, dashboard_page, admin_user):
+    open_dashboard(login_page, dashboard_page, admin_user)
+    dashboard_page.search_sidebar_menu("Admin")
+    dashboard_page.should_have_sidebar_search_results("Admin")
 
 
 @pytest.mark.smoke_dashboard
